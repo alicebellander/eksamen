@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="ER-diagram" id="0">
+    <mxGraphModel dx="1003" dy="678" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" value="ER-diagram – Recipe CRUD App" vertex="1">
+          <mxGeometry height="40" width="450" x="300" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#1e40af;fontStyle=1;fontSize=14;align=center;" value="Category" vertex="1">
+          <mxGeometry height="40" width="220" x="120" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#1e40af;fontSize=12;align=left;spacingLeft=10;" value="🔑 Id (int, PK)" vertex="1">
+          <mxGeometry height="35" width="220" x="120" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#1e40af;fontSize=12;align=left;spacingLeft=10;" value="Name (string, påkrevd)" vertex="1">
+          <mxGeometry height="35" width="220" x="120" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#166534;fontStyle=1;fontSize=14;align=center;" value="Recipe" vertex="1">
+          <mxGeometry height="40" width="280" x="520" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="🔑 Id (int, PK)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="Title (string, påkrevd, maks 100)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="Description (string, påkrevd, maks 500)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="Ingredients (string)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="265" as="geometry" />
+        </mxCell>
+        <mxCell id="25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="Instructions (string)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="DifficultyLevel (string) – Lett/Middels/Vanskelig" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="27" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;fontStyle=2;" value="🔗 CategoryId (int?, FK → Category.Id)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="CreatedAt (DateTime, automatisk)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#166534;fontSize=12;align=left;spacingLeft=10;" value="UpdatedAt (DateTime?, settes ved endring)" vertex="1">
+          <mxGeometry height="35" width="280" x="520" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="30" edge="1" parent="1" source="10" style="edgeStyle=entityRelationEdgeStyle;endArrow=ERmanyToOne;startArrow=ERmandOne;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1e40af;strokeWidth=2;" target="20" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="31" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#1e40af;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="355" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="32" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#1e40af;" value="0..*" vertex="1">
+          <mxGeometry height="30" width="40" x="470" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="40" parent="1" style="text;html=1;strokeColor=#d1d5db;fillColor=#f9fafb;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=12;spacingLeft=10;" value="Én kategori kan ha mange oppskrifter.&#xa;En oppskrift tilhører 0 eller 1 kategori." vertex="1">
+          <mxGeometry height="50" width="400" x="120" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="50" parent="1" style="text;html=1;strokeColor=#d1d5db;fillColor=#f9fafb;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=12;spacingLeft=10;" value="🔑 = primærnøkkel (PK)&#xa;🔗 = fremmednøkkel (FK)" vertex="1">
+          <mxGeometry height="50" width="220" x="580" y="560" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
