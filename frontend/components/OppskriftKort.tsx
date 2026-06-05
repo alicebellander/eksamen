@@ -10,39 +10,59 @@ interface Props {
 
 export default function OppskriftKort({ oppskrift, onSlettet }: Props) {
   async function handleSlett() {
-    if (!confirm(`Slett "${oppskrift.tittel}"?`)) return;
+    if (!confirm(`Er du sikker på at du vil slette «${oppskrift.tittel}»?`)) return;
     await slettOppskrift(oppskrift.id);
     onSlettet(oppskrift.id);
   }
 
   return (
-    <div className="border rounded-xl p-5 bg-white shadow-sm flex flex-col gap-2">
-      <h2 className="text-xl font-semibold text-gray-800">{oppskrift.tittel}</h2>
-      <p className="text-gray-500 text-sm line-clamp-2">{oppskrift.beskrivelse}</p>
-      <div className="flex gap-3 text-sm text-gray-400 mt-1">
-        <span>🍽 {oppskrift.porsjoner} porsjoner</span>
-        <span>⏱ {oppskrift.tilberedningstidMinutter} min</span>
+    <article className="card h-full" aria-label={oppskrift.tittel}>
+
+      <h2 className="text-xl" style={{ color: "var(--text)" }}>
+        {oppskrift.tittel}
+      </h2>
+
+      {oppskrift.beskrivelse && (
+        <p className="text-sm line-clamp-2" style={{ color: "var(--text-secondary)" }}>
+          {oppskrift.beskrivelse}
+        </p>
+      )}
+
+      {/* aria-hidden på emojier — teksten er den bærende informasjonen (WCAG 1.1.1) */}
+      <div className="flex flex-wrap gap-2 mt-1">
+        <span className="meta-pill">
+          <span aria-hidden="true">🍽</span>
+          <span>{oppskrift.porsjoner}&nbsp;porsjoner</span>
+        </span>
+        <span className="meta-pill">
+          <span aria-hidden="true">⏱</span>
+          <span>{oppskrift.tilberedningstidMinutter}&nbsp;min</span>
+        </span>
       </div>
-      <div className="flex gap-2 mt-3">
+
+      {/* Handlingsknapper — mt-auto skyver dem til bunnen av kortet */}
+      <div className="flex gap-2 mt-auto pt-3">
         <Link
           href={`/oppskrifter/${oppskrift.id}`}
-          className="flex-1 text-center py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 text-sm font-medium"
+          className="btn btn-ghost-blue flex-1"
         >
           Se oppskrift
         </Link>
         <Link
           href={`/oppskrifter/${oppskrift.id}/rediger`}
-          className="flex-1 text-center py-1.5 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-100 text-sm font-medium"
+          className="btn btn-secondary flex-1"
         >
           Rediger
         </Link>
+        {/* aria-label gir full kontekst til skjermlesere (WCAG 2.4.6) */}
         <button
           onClick={handleSlett}
-          className="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 text-sm font-medium"
+          className="btn btn-danger"
+          aria-label={`Slett ${oppskrift.tittel}`}
         >
           Slett
         </button>
       </div>
-    </div>
+    </article>
   );
 }

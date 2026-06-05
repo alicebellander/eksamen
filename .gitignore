@@ -1,8 +1,27 @@
+# ── .NET build-artefakter ────────────────────────────────────────────
 bin/
 obj/
+*.user
+*.suo
+.vs/
+
+# ── Hemmelige konfigurasjonsfiler – IKKE commit passord/nøkler ───────
+appsettings.json
+appsettings.*.json
+!appsettings.example.json
+
+# ── SQLite (brukes ikke her, men vanlig å ignorere) ──────────────────
 *.db
 *.db-shm
 *.db-wal
+
+# ── Node / Next.js frontend ──────────────────────────────────────────
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# ── macOS og OS-filer ────────────────────────────────────────────────
 .DS_Store
-next-js/node_modules/
-next-js/.next/
+Thumbs.db

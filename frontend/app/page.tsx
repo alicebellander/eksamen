@@ -22,36 +22,65 @@ export default function Hjem() {
   }
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-4xl mx-auto px-4 py-10">
+
+      {/* Sidetopp med tittel og handling */}
+      <div className="flex items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Oppskrifter</h1>
-          <p className="text-gray-500 mt-1">Alle dine oppskrifter på ett sted</p>
+          <h1 className="text-3xl" style={{ color: "var(--text)" }}>
+            Mine oppskrifter
+          </h1>
+          <p className="mt-1 text-base" style={{ color: "var(--text-muted)" }}>
+            Dine lagrede oppskrifter
+          </p>
         </div>
-        <Link
-          href="/oppskrifter/ny"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700"
-        >
+        <Link href="/oppskrifter/ny" className="btn btn-primary shrink-0">
           + Ny oppskrift
         </Link>
       </div>
 
-      {laster && <p className="text-gray-400">Laster...</p>}
-      {feil && (
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-4">
-          <p className="font-medium">Backend ikke tilgjengelig</p>
-          <p className="text-sm mt-1">{feil}</p>
-        </div>
-      )}
-      {!laster && !feil && oppskrifter.length === 0 && (
-        <p className="text-gray-400">Ingen oppskrifter ennå. Legg til en!</p>
-      )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {oppskrifter.map((o) => (
-          <OppskriftKort key={o.id} oppskrift={o} onSlettet={handleSlettet} />
-        ))}
+      {/* aria-live annonserer statusendringer til skjermlesere (WCAG 4.1.3) */}
+      <div aria-live="polite" aria-atomic="true">
+        {laster && (
+          <p style={{ color: "var(--text-muted)" }}>Laster oppskrifter…</p>
+        )}
+        {feil && (
+          <div className="alert-warning" role="alert">
+            <p className="font-bold">Backend ikke tilgjengelig</p>
+            <p className="mt-1 text-sm">{feil}</p>
+          </div>
+        )}
+        {!laster && !feil && oppskrifter.length === 0 && (
+          <div
+            className="text-center py-16 rounded-2xl"
+            style={{ background: "var(--surface)", border: "2px dashed var(--blue-light)" }}
+          >
+            <p className="text-lg font-bold mb-2" style={{ color: "var(--text)" }}>
+              Ingen oppskrifter ennå
+            </p>
+            <p className="mb-5" style={{ color: "var(--text-muted)" }}>
+              Kom i gang ved å legge til din første oppskrift.
+            </p>
+            <Link href="/oppskrifter/ny" className="btn btn-primary">
+              + Legg til oppskrift
+            </Link>
+          </div>
+        )}
       </div>
-    </main>
+
+      {/* Oppskrift-grid — semantisk liste (WCAG 1.3.1) */}
+      {oppskrifter.length > 0 && (
+        <ul
+          className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2"
+          aria-label={`${oppskrifter.length} oppskrift${oppskrifter.length !== 1 ? "er" : ""}`}
+        >
+          {oppskrifter.map((o) => (
+            <li key={o.id}>
+              <OppskriftKort oppskrift={o} onSlettet={handleSlettet} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

@@ -20,19 +20,27 @@ export default function RedigerOppskrift() {
     router.push(`/oppskrifter/${id}`);
   }
 
-  if (!oppskrift) return <p className="p-10 text-gray-400">Laster...</p>;
+  if (!oppskrift) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-10" aria-live="polite">
+        <p style={{ color: "var(--text-muted)" }}>Laster oppskrift…</p>
+      </div>
+    );
+  }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-10">
-      <Link href={`/oppskrifter/${id}`} className="text-sm text-blue-600 hover:underline mb-6 block">
-        ← Tilbake
+    <div className="max-w-2xl mx-auto px-4 py-10">
+      <Link href={`/oppskrifter/${id}`} className="back-link mb-6 block">
+        ← Tilbake til oppskrift
       </Link>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Rediger oppskrift</h1>
+      <h1 className="text-2xl mb-8" style={{ color: "var(--text)" }}>
+        Rediger: {oppskrift.tittel}
+      </h1>
       <OppskriftSkjema
         initialVerdier={oppskrift}
         onSubmit={handleSubmit}
         submitTekst="Lagre endringer"
       />
-    </main>
+    </div>
   );
 }

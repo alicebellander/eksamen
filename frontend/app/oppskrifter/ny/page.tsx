@@ -14,12 +14,14 @@ export default function NyOppskrift() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-10">
-      <Link href="/" className="text-sm text-blue-600 hover:underline mb-6 block">
-        ← Tilbake
+    <div className="max-w-2xl mx-auto px-4 py-10">
+      <Link href="/" className="back-link mb-6 block">
+        ← Tilbake til alle oppskrifter
       </Link>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Ny oppskrift</h1>
+      <h1 className="text-2xl mb-8" style={{ color: "var(--text)" }}>
+        Ny oppskrift
+      </h1>
       <OppskriftSkjema onSubmit={handleSubmit} submitTekst="Lagre oppskrift" />
-    </main>
+    </div>
   );
 }
