@@ -7,25 +7,16 @@ namespace RecipeApi.Models;
 // [Column] beholder de eksisterende kolonnenavnene i databasen mens vi bruker norske C#-navn.
 public class Recipe
 {
-    [Key]
-    [Column("ID")]
-    public int Id { get; set; }
 
-    [Required, MaxLength(100)]
-    [Column("Title")]
-    public string Tittel { get; set; } = string.Empty;
+    public int ID { get; set; }
 
-    [Required, MaxLength(500)]
-    [Column("Description")]
-    public string Beskrivelse { get; set; } = string.Empty;
+    public string Title { get; set; } 
 
-    [Required]
-    [Column("Ingredients")]
-    public string Ingredienser { get; set; } = string.Empty;
+    public string Description { get; set; }
 
-    [Required]
-    [Column("Instructions")]
-    public string Fremgangsmaate { get; set; } = string.Empty;
+    public string Ingredients { get; set; } 
+
+    public string Instructions { get; set; } 
 
     // Nye kolonner – legges til i neste migrasjon
     public int Porsjoner { get; set; }
@@ -33,8 +24,8 @@ public class Recipe
     public int TilberedningstidMinutter { get; set; }
 
     [Column("CreatedAt")]
-    public DateTime OpprettetDato { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Column("UpdatedAt")]
-    public DateTime? OppdatertDato { get; set; }
+    public DateTime? UpdatedAt  { get; set; }
 }
