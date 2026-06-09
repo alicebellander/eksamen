@@ -3,23 +3,23 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { hentOppskrift, slettOppskrift, Oppskrift } from "@/lib/api";
+import { getRecipe, deleteRecipe, Recipe } from "@/lib/api";
 
 export default function OppskriftDetalj() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const [oppskrift, setOppskrift] = useState<Oppskrift | null>(null);
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [feil, setFeil] = useState<string | null>(null);
 
   useEffect(() => {
-    hentOppskrift(Number(id))
-      .then(setOppskrift)
+    getRecipe(Number(id))
+      .then(setRecipe)
       .catch(() => setFeil("Oppskriften ble ikke funnet."));
   }, [id]);
 
   async function handleSlett() {
     if (!confirm("Er du sikker på at du vil slette denne oppskriften?")) return;
-    await slettOppskrift(Number(id));
+    await deleteRecipe(Number(id));
     router.push("/");
   }
 
@@ -31,7 +31,7 @@ export default function OppskriftDetalj() {
     );
   }
 
-  if (!oppskrift) {
+  if (!recipe) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-10" aria-live="polite">
         <p style={{ color: "var(--text-muted)" }}>Laster oppskrift…</p>
@@ -39,8 +39,8 @@ export default function OppskriftDetalj() {
     );
   }
 
-  const ingrediensLinjer = oppskrift.ingredienser.split("\n").filter(Boolean);
-  const stegLinjer = oppskrift.fremgangsmaate.split("\n").filter(Boolean);
+  const ingredientLines = recipe.ingredients.split("\n").filter(Boolean);
+  const instructionLines = recipe.instructions.split("\n").filter(Boolean);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
@@ -58,7 +58,7 @@ export default function OppskriftDetalj() {
             className="text-3xl"
             style={{ color: "var(--text)" }}
           >
-            {oppskrift.tittel}
+            {recipe.title}
           </h1>
           <div className="flex gap-2 shrink-0">
             <Link href={`/oppskrifter/${id}/rediger`} className="btn btn-secondary">
@@ -74,9 +74,9 @@ export default function OppskriftDetalj() {
           </div>
         </div>
 
-        {oppskrift.beskrivelse && (
+        {recipe.description && (
           <p className="text-base mb-4" style={{ color: "var(--text-secondary)" }}>
-            {oppskrift.beskrivelse}
+            {recipe.description}
           </p>
         )}
 
@@ -84,11 +84,11 @@ export default function OppskriftDetalj() {
         <div className="flex flex-wrap gap-2 mb-8" aria-label="Oppsummering">
           <span className="meta-pill">
             <span aria-hidden="true">🍽</span>
-            <span>{oppskrift.porsjoner}&nbsp;porsjoner</span>
+            <span>{recipe.portions}&nbsp;porsjoner</span>
           </span>
           <span className="meta-pill">
             <span aria-hidden="true">⏱</span>
-            <span>{oppskrift.tilberedningstidMinutter}&nbsp;min</span>
+            <span>{recipe.cookingTimeMinutes}&nbsp;min</span>
           </span>
         </div>
 
@@ -104,7 +104,7 @@ export default function OppskriftDetalj() {
             Ingredienser
           </h2>
           <ul className="space-y-2">
-            {ingrediensLinjer.map((linje, i) => (
+            {ingredientLines.map((line, i) => (
               <li
                 key={i}
                 className="flex items-baseline gap-3 text-base"
@@ -121,7 +121,7 @@ export default function OppskriftDetalj() {
                     marginTop: "0.45rem",
                   }}
                 />
-                {linje}
+                {line}
               </li>
             ))}
           </ul>
@@ -139,7 +139,7 @@ export default function OppskriftDetalj() {
             Fremgangsmåte
           </h2>
           <ol className="space-y-4">
-            {stegLinjer.map((steg, i) => (
+            {instructionLines.map((step, i) => (
               <li
                 key={i}
                 className="flex gap-3 text-base"
@@ -152,7 +152,7 @@ export default function OppskriftDetalj() {
                 >
                   {i + 1}.
                 </span>
-                <span>{steg}</span>
+                <span>{step}</span>
               </li>
             ))}
           </ol>

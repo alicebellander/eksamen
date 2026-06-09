@@ -2,23 +2,23 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { hentAlleOppskrifter, Oppskrift } from "@/lib/api";
+import { getAllRecipes, Recipe } from "@/lib/api";
 import OppskriftKort from "@/components/OppskriftKort";
 
 export default function Hjem() {
-  const [oppskrifter, setOppskrifter] = useState<Oppskrift[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [laster, setLaster] = useState(true);
   const [feil, setFeil] = useState<string | null>(null);
 
   useEffect(() => {
-    hentAlleOppskrifter()
-      .then(setOppskrifter)
+    getAllRecipes()
+      .then(setRecipes)
       .catch(() => setFeil("Kunne ikke koble til API. Er C#-backenden oppe?"))
       .finally(() => setLaster(false));
   }, []);
 
   function handleSlettet(id: number) {
-    setOppskrifter((prev) => prev.filter((o) => o.id !== id));
+    setRecipes((prev) => prev.filter((r) => r.id !== id));
   }
 
   return (
@@ -50,7 +50,7 @@ export default function Hjem() {
             <p className="mt-1 text-sm">{feil}</p>
           </div>
         )}
-        {!laster && !feil && oppskrifter.length === 0 && (
+        {!laster && !feil && recipes.length === 0 && (
           <div
             className="text-center py-16 rounded-2xl"
             style={{ background: "var(--surface)", border: "2px dashed var(--blue-light)" }}
@@ -69,14 +69,14 @@ export default function Hjem() {
       </div>
 
       {/* Oppskrift-grid — semantisk liste (WCAG 1.3.1) */}
-      {oppskrifter.length > 0 && (
+      {recipes.length > 0 && (
         <ul
           className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2"
-          aria-label={`${oppskrifter.length} oppskrift${oppskrifter.length !== 1 ? "er" : ""}`}
+          aria-label={`${recipes.length} oppskrift${recipes.length !== 1 ? "er" : ""}`}
         >
-          {oppskrifter.map((o) => (
-            <li key={o.id}>
-              <OppskriftKort oppskrift={o} onSlettet={handleSlettet} />
+          {recipes.map((r) => (
+            <li key={r.id}>
+              <OppskriftKort recipe={r} onSlettet={handleSlettet} />
             </li>
           ))}
         </ul>

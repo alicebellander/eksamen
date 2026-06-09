@@ -3,14 +3,14 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OppskriftSkjema from "@/components/OppskriftSkjema";
-import { opprettOppskrift, OppskriftInput } from "@/lib/api";
+import { createRecipe, RecipeInput } from "@/lib/api";
 
 export default function NyOppskrift() {
   const router = useRouter();
 
-  async function handleSubmit(data: OppskriftInput) {
-    const oppskrift = await opprettOppskrift(data);
-    router.push(`/oppskrifter/${oppskrift.id}`);
+  async function handleSubmit(data: RecipeInput) {
+    const recipe = await createRecipe(data);
+    router.push(`/oppskrifter/${recipe.id}`);
   }
 
   return (

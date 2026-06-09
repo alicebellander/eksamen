@@ -1,34 +1,34 @@
 "use client";
 
 import { useId, useState } from "react";
-import { OppskriftInput, Oppskrift } from "@/lib/api";
+import { RecipeInput, Recipe } from "@/lib/api";
 
 interface Props {
-  initialVerdier?: Oppskrift;
-  onSubmit: (data: OppskriftInput) => Promise<void>;
+  initialVerdier?: Recipe;
+  onSubmit: (data: RecipeInput) => Promise<void>;
   submitTekst: string;
 }
 
-const tomSkjema: OppskriftInput = {
-  tittel: "",
-  beskrivelse: "",
-  ingredienser: "",
-  fremgangsmaate: "",
-  porsjoner: 2,
-  tilberedningstidMinutter: 30,
+const emptyForm: RecipeInput = {
+  title: "",
+  description: "",
+  ingredients: "",
+  instructions: "",
+  portions: 2,
+  cookingTimeMinutes: 30,
 };
 
 export default function OppskriftSkjema({ initialVerdier, onSubmit, submitTekst }: Props) {
-  const [form, setForm] = useState<OppskriftInput>(initialVerdier ?? tomSkjema);
+  const [form, setForm] = useState<RecipeInput>(initialVerdier ?? emptyForm);
   const [laster, setLaster] = useState(false);
   const [feil, setFeil] = useState<string | null>(null);
 
   // useId gir unike ID-er for label–input-kobling (WCAG 1.3.1, 4.1.2)
   const uid = useId();
-  const id = (felt: string) => `${uid}-${felt}`;
+  const id = (field: string) => `${uid}-${field}`;
 
-  function oppdater(felt: keyof OppskriftInput, verdi: string | number) {
-    setForm((prev) => ({ ...prev, [felt]: verdi }));
+  function update(field: keyof RecipeInput, value: string | number) {
+    setForm((prev) => ({ ...prev, [field]: value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -68,61 +68,61 @@ export default function OppskriftSkjema({ initialVerdier, onSubmit, submitTekst 
       </p>
 
       <div>
-        <label htmlFor={id("tittel")} className="form-label">
+        <label htmlFor={id("title")} className="form-label">
           Tittel<Obligatorisk />
         </label>
         <input
-          id={id("tittel")}
+          id={id("title")}
           type="text"
           required
           autoComplete="off"
-          value={form.tittel}
-          onChange={(e) => oppdater("tittel", e.target.value)}
+          value={form.title}
+          onChange={(e) => update("title", e.target.value)}
           className="form-input"
           aria-required="true"
         />
       </div>
 
       <div>
-        <label htmlFor={id("beskrivelse")} className="form-label">
+        <label htmlFor={id("description")} className="form-label">
           Kort beskrivelse
         </label>
         <input
-          id={id("beskrivelse")}
+          id={id("description")}
           type="text"
-          value={form.beskrivelse}
-          onChange={(e) => oppdater("beskrivelse", e.target.value)}
+          value={form.description ?? ""}
+          onChange={(e) => update("description", e.target.value)}
           className="form-input"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor={id("porsjoner")} className="form-label">
+          <label htmlFor={id("portions")} className="form-label">
             Porsjoner<Obligatorisk />
           </label>
           <input
-            id={id("porsjoner")}
+            id={id("portions")}
             type="number"
             min={1}
             required
-            value={form.porsjoner}
-            onChange={(e) => oppdater("porsjoner", Number(e.target.value))}
+            value={form.portions}
+            onChange={(e) => update("portions", Number(e.target.value))}
             className="form-input"
             aria-required="true"
           />
         </div>
         <div>
-          <label htmlFor={id("tid")} className="form-label">
+          <label htmlFor={id("cookingTimeMinutes")} className="form-label">
             Tid (minutter)<Obligatorisk />
           </label>
           <input
-            id={id("tid")}
+            id={id("cookingTimeMinutes")}
             type="number"
             min={1}
             required
-            value={form.tilberedningstidMinutter}
-            onChange={(e) => oppdater("tilberedningstidMinutter", Number(e.target.value))}
+            value={form.cookingTimeMinutes}
+            onChange={(e) => update("cookingTimeMinutes", Number(e.target.value))}
             className="form-input"
             aria-required="true"
           />
@@ -130,15 +130,15 @@ export default function OppskriftSkjema({ initialVerdier, onSubmit, submitTekst 
       </div>
 
       <div>
-        <label htmlFor={id("ingredienser")} className="form-label">
+        <label htmlFor={id("ingredients")} className="form-label">
           Ingredienser<Obligatorisk />
         </label>
         <textarea
-          id={id("ingredienser")}
+          id={id("ingredients")}
           required
           rows={5}
-          value={form.ingredienser}
-          onChange={(e) => oppdater("ingredienser", e.target.value)}
+          value={form.ingredients}
+          onChange={(e) => update("ingredients", e.target.value)}
           placeholder={"Én ingrediens per linje, f.eks:\n2 egg\n1 dl melk"}
           className="form-textarea"
           aria-required="true"
@@ -146,15 +146,15 @@ export default function OppskriftSkjema({ initialVerdier, onSubmit, submitTekst 
       </div>
 
       <div>
-        <label htmlFor={id("fremgangsmaate")} className="form-label">
+        <label htmlFor={id("instructions")} className="form-label">
           Fremgangsmåte<Obligatorisk />
         </label>
         <textarea
-          id={id("fremgangsmaate")}
+          id={id("instructions")}
           required
           rows={7}
-          value={form.fremgangsmaate}
-          onChange={(e) => oppdater("fremgangsmaate", e.target.value)}
+          value={form.instructions}
+          onChange={(e) => update("instructions", e.target.value)}
           placeholder="Beskriv steg for steg…"
           className="form-textarea"
           aria-required="true"

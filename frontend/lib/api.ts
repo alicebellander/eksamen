@@ -1,30 +1,31 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
 
-export interface Oppskrift {
+export interface Recipe {
   id: number;
-  tittel: string;
-  beskrivelse: string;
-  ingredienser: string;
-  fremgangsmaate: string;
-  porsjoner: number;
-  tilberedningstidMinutter: number;
+  title: string;
+  description?: string;
+  ingredients: string;
+  instructions: string;
+  portions: number;
+  cookingTimeMinutes: number;
 }
 
-export type OppskriftInput = Omit<Oppskrift, "id">;
+export type RecipeInput = Omit<Recipe, "id">;
 
-export async function hentAlleOppskrifter(): Promise<Oppskrift[]> {
+export async function getAllRecipes(): Promise<Recipe[]> {
   const res = await fetch(`${BASE_URL}/oppskrifter`);
   if (!res.ok) throw new Error("Kunne ikke hente oppskrifter");
   return res.json();
 }
 
-export async function hentOppskrift(id: number): Promise<Oppskrift> {
+export async function getRecipe(id: number): Promise<Recipe> {
   const res = await fetch(`${BASE_URL}/oppskrifter/${id}`);
   if (!res.ok) throw new Error("Kunne ikke hente oppskrift");
   return res.json();
 }
 
-export async function opprettOppskrift(data: OppskriftInput): Promise<Oppskrift> {
+
+export async function createRecipe(data: RecipeInput): Promise<Recipe> {
   const res = await fetch(`${BASE_URL}/oppskrifter`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -34,7 +35,7 @@ export async function opprettOppskrift(data: OppskriftInput): Promise<Oppskrift>
   return res.json();
 }
 
-export async function oppdaterOppskrift(id: number, data: OppskriftInput): Promise<Oppskrift> {
+export async function updateRecipe(id: number, data: RecipeInput): Promise<Recipe> {
   const res = await fetch(`${BASE_URL}/oppskrifter/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -44,7 +45,7 @@ export async function oppdaterOppskrift(id: number, data: OppskriftInput): Promi
   return res.json();
 }
 
-export async function slettOppskrift(id: number): Promise<void> {
+export async function deleteRecipe(id: number): Promise<void> {
   const res = await fetch(`${BASE_URL}/oppskrifter/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error("Kunne ikke slette oppskrift");
 }

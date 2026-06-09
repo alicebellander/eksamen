@@ -1,30 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { Oppskrift, slettOppskrift } from "@/lib/api";
+import { Recipe, deleteRecipe } from "@/lib/api";
 
 interface Props {
-  oppskrift: Oppskrift;
+  recipe: Recipe;
   onSlettet: (id: number) => void;
 }
 
-export default function OppskriftKort({ oppskrift, onSlettet }: Props) {
+export default function OppskriftKort({ recipe, onSlettet }: Props) {
   async function handleSlett() {
-    if (!confirm(`Er du sikker på at du vil slette «${oppskrift.tittel}»?`)) return;
-    await slettOppskrift(oppskrift.id);
-    onSlettet(oppskrift.id);
+    if (!confirm(`Er du sikker på at du vil slette «${recipe.title}»?`)) return;
+    await deleteRecipe(recipe.id);
+    onSlettet(recipe.id);
   }
 
   return (
-    <article className="card h-full" aria-label={oppskrift.tittel}>
+    <article className="card h-full" aria-label={recipe.title}>
 
       <h2 className="text-xl" style={{ color: "var(--text)" }}>
-        {oppskrift.tittel}
+        {recipe.title}
       </h2>
 
-      {oppskrift.beskrivelse && (
+      {recipe.description && (
         <p className="text-sm line-clamp-2" style={{ color: "var(--text-secondary)" }}>
-          {oppskrift.beskrivelse}
+          {recipe.description}
         </p>
       )}
 
@@ -32,24 +32,24 @@ export default function OppskriftKort({ oppskrift, onSlettet }: Props) {
       <div className="flex flex-wrap gap-2 mt-1">
         <span className="meta-pill">
           <span aria-hidden="true">🍽</span>
-          <span>{oppskrift.porsjoner}&nbsp;porsjoner</span>
+          <span>{recipe.portions}&nbsp;porsjoner</span>
         </span>
         <span className="meta-pill">
           <span aria-hidden="true">⏱</span>
-          <span>{oppskrift.tilberedningstidMinutter}&nbsp;min</span>
+          <span>{recipe.cookingTimeMinutes}&nbsp;min</span>
         </span>
       </div>
 
       {/* Handlingsknapper — mt-auto skyver dem til bunnen av kortet */}
       <div className="flex gap-2 mt-auto pt-3">
         <Link
-          href={`/oppskrifter/${oppskrift.id}`}
+          href={`/oppskrifter/${recipe.id}`}
           className="btn btn-ghost-blue flex-1"
         >
           Se oppskrift
         </Link>
         <Link
-          href={`/oppskrifter/${oppskrift.id}/rediger`}
+          href={`/oppskrifter/${recipe.id}/rediger`}
           className="btn btn-secondary flex-1"
         >
           Rediger
@@ -58,7 +58,7 @@ export default function OppskriftKort({ oppskrift, onSlettet }: Props) {
         <button
           onClick={handleSlett}
           className="btn btn-danger"
-          aria-label={`Slett ${oppskrift.tittel}`}
+          aria-label={`Slett ${recipe.title}`}
         >
           Slett
         </button>
