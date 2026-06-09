@@ -1,24 +1,34 @@
-using Microsoft.EntityFrameworkCore;
-using RecipeApi.Models;
+
 
 namespace RecipeApi.Data;
 
-// DbContext er broen mellom C#-modellene og PostgreSQL-databasen.
-// EF Core bruker denne klassen til å generere SQL og håndtere tilkoblingen.
+// AppDbContext er broen mellom C#-modellene og PostgreSQL-databasen.
+// EF Core bruker denne klassen til å generere SQL og håndtere databasetilkoblingen.
+// DbContextOptions sendes inn via dependency injection fra Program.cs.
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    // DbSet representerer tabellen "Recipes" i databasen.
-    // EF Core bruker modellnavnet (Recipe) til å sette tabellnavnet automatisk.
+    // DbSet<Recipe> representerer "recipes"-tabellen i databasen.
+    // Vi kan spørre, legge til, oppdatere og slette rader via denne egenskapen.
     public DbSet<Recipe> Recipes { get; set; }
+    public DbSet<User> Users { get; set; }
 
+    // OnModelCreating kjøres én gang ved oppstart og konfigurerer tabellstrukturen.
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Setter eksplisitt tabellnavn til "recipes" (lowercase er PostgreSQL-konvensjon)
         modelBuilder.Entity<Recipe>().ToTable("recipes");
-
-        // Sørger for at CreatedAt alltid settes til gjeldende tid i UTC av databasen
         modelBuilder.Entity<Recipe>()
-            .Property(r => r.OpprettetDato)
+            .Property(r => r.CreatedAt)
+            .HasDefaultValueSql("NOW()");
+
+        modelBuilder.Entity<User>().ToTable("users");
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.GoogleId)
+            .IsUnique();
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+        modelBuilder.Entity<User>()
+            .Property(u => u.CreatedAt)
             .HasDefaultValueSql("NOW()");
     }
 }

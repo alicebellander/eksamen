@@ -1,55 +1,68 @@
-using Microsoft.AspNetCore.Mvc;
+
 
 namespace RecipeApi.Controllers;
 
-// Controller for oppskrifter – håndterer alle HTTP-forespørsler mot /api/oppskrifter.
-// Klassenavnet OppskrifterController gir automatisk ruten "oppskrifter".
+// [ApiController] aktiverer automatisk validering av request-body og bedre feilmeldinger.
+// [Route("api/oppskrifter")] setter basis-URL for alle endepunktene i denne kontrolleren.
 [ApiController]
-[Route("api/[controller]")]
-public class OppskrifterController(IRecipeService recipeService) : ControllerBase
+[Route("api/oppskrifter")]
+// Kontrolleren tar imot HTTP-forespørsler og delegerer logikken til RecipeService.
+// IRecipeService injiseres automatisk av ASP.NET sitt dependency injection-system.
+public class RecipesController(IRecipeService recipeService) : ControllerBase
 {
     private readonly IRecipeService _recipeService = recipeService;
 
-    // GET api/oppskrifter – henter alle oppskrifter
+    // GET /api/oppskrifter
+    // Henter alle oppskrifter fra databasen og returnerer dem som JSON med statuskode 200 OK.
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var oppskrifter = await _recipeService.GetAllAsync();
-        return Ok(oppskrifter); // 200 OK
+        var recipes = await _recipeService.GetAllAsync();
+        return Ok(recipes);
     }
 
-    // GET api/oppskrifter/{id} – henter én oppskrift
+    // GET /api/oppskrifter/{id}
+    // Henter én spesifikk oppskrift basert på ID.
+    // Returnerer 200 OK med oppskriften, eller 404 Not Found hvis den ikke finnes.
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var oppskrift = await _recipeService.GetByIdAsync(id);
-        if (oppskrift is null) return NotFound();
-        return Ok(oppskrift);
+        var recipe = await _recipeService.GetByIdAsync(id);
+        if (recipe is null) return NotFound();
+        return Ok(recipe);
     }
 
-    // POST api/oppskrifter – oppretter en ny oppskrift
+    // POST /api/oppskrifter
+    // Oppretter en ny oppskrift fra JSON-kroppen i forespørselen.
+    // [FromBody] henter og validerer dataene fra request-body.
+    // Returnerer 201 Created med den nye oppskriften og en Location-header som peker til den.
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] OpprettOppskriftRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateRecipeRequest request)
     {
-        var oppskrift = await _recipeService.CreateAsync(request);
-        return CreatedAtAction(nameof(GetById), new { id = oppskrift.Id }, oppskrift);
+        var recipe = await _recipeService.CreateAsync(request);
+        // CreatedAtAction genererer Location-headeren som peker til GET-endepunktet for den nye oppskriften.
+        return CreatedAtAction(nameof(GetById), new { id = recipe.Id }, recipe);
     }
 
-    // PUT api/oppskrifter/{id} – oppdaterer en eksisterende oppskrift
+    // PUT /api/oppskrifter/{id}
+    // Oppdaterer en eksisterende oppskrift med nye data fra request-body.
+    // Returnerer 200 OK med oppdatert oppskrift, eller 404 Not Found hvis ID ikke finnes.
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] OppdaterOppskriftRequest request)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateRecipeRequest request)
     {
-        var oppskrift = await _recipeService.UpdateAsync(id, request);
-        if (oppskrift is null) return NotFound();
-        return Ok(oppskrift);
+        var recipe = await _recipeService.UpdateAsync(id, request);
+        if (recipe is null) return NotFound();
+        return Ok(recipe);
     }
 
-    // DELETE api/oppskrifter/{id} – sletter en oppskrift
+    // DELETE /api/oppskrifter/{id}
+    // Sletter en oppskrift med gitt ID.
+    // Returnerer 204 No Content ved vellykket sletting, eller 404 Not Found hvis den ikke finnes.
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _recipeService.DeleteAsync(id);
         if (!deleted) return NotFound();
-        return NoContent(); // 204 No Content
+        return NoContent();
     }
 }
